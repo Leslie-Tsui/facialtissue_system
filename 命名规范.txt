@@ -1,0 +1,2 @@
+1、控件名+命名(大写)
+例如btnQuery、label、tableShow
