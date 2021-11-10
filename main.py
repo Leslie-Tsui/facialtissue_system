@@ -7,8 +7,7 @@ from PyQt5.QtGui import QPixmap, QPalette, QImage, QFont
 from PyQt5.QtWidgets import *
 
 from Camera.TriggerGrab import Camera
-from YOLO import mvsdk
-from YOLO.yolo import detecter
+
 import datetime
 
 
@@ -17,11 +16,7 @@ class MainFrame(QWidget):
     def __init__(self):
         super(MainFrame, self).__init__()
         self.initUI()
-        self.co = com()
-        self.co.RelayClose()
 
-        self.detecter = detecter()  # 初始化一个yolo模型的对象
-        self.model = self.detecter.model  # 预加载模型
         self.camera = Camera(self.label, self.export_table, self.statistic_table, self.detecter, self.model,
                              self.countLabel,
                              self.detcountLabel, self.totalLabel, self.alertLabel, self.co)  # 初始化打开相机
@@ -31,40 +26,40 @@ class MainFrame(QWidget):
         self.setGeometry(200, 200, 3300, 1300)
         self.setWindowTitle('检测')
         # self.setWindowIcon(QIcon('...'))
-        self.btnQuery = QPushButton('查询', self)
-        self.btnSetting = QPushButton('设置', self)
 
-        self.label1 = QLabel(self)  # 设置的个数展示文本
-        self.label2 = QLabel(self)  # 检测的个数展示文本
-        self.label3 = QLabel(self)  # 已经检测的总个数
-        self.label4 = QLabel(self)  # 报警个数
+        # 添加按钮
+        # self.btnQuery = QPushButton('查询', self)
 
-        self.label1.setText('|设置个数:')
-        self.label2.setText('|检测个数:')
-        self.label3.setText('|总检测数:')
-        self.label4.setText('|报警个数:')
+        # 添加标签
+        self.labelTotal = QLabel(self)  # 总包数展示文本
+        self.labelWarning = QLabel(self)  # 报警个数展示文本
+        self.labelResult = QLabel(self)  # 检测结果
+
+        self.labelTotal.setText('总包数:')
+        self.labelW.setText('|报警个数:')
+        self.labelResult.setText('|检测结果:')
 
         self.label1.setFont(QFont("Roman times", 20, QFont.Bold))
         self.label2.setFont(QFont("Roman times", 20, QFont.Bold))
         self.label3.setFont(QFont("Roman times", 20, QFont.Bold))
         self.label4.setFont(QFont("Roman times", 20, QFont.Bold))
 
-        self.countLabel = QLabel(self)  # 设置的个数展示文本
-        self.detcountLabel = QLabel(self)  # 检测的个数展示文本
-        self.totalLabel = QLabel(self)  # 设置已经检测的总个数
-        self.alertLabel = QLabel(self)  # 设置报警个数
+        self.labelTotal_value = QLabel(self)  # 总包数
+        self.labelWarning_value = QLabel(self)  # 报警个数
+        self.labelResult_value = QLabel(self)  # 检测的结果
 
-        self.countLabel.setFont(QFont("Roman times", 20, QFont.Bold))
-        self.detcountLabel.setFont(QFont("Roman times", 20, QFont.Bold))
-        self.totalLabel.setFont(QFont("Roman times", 20, QFont.Bold))
-        self.alertLabel.setFont(QFont("Roman times", 20, QFont.Bold))
+        # 设置字体，字号
+        self.labelTotal_value.setFont(QFont("Roman times", 20, QFont.Bold))
+        self.labelWarning_value.setFont(QFont("Roman times", 20, QFont.Bold))
+        self.labelResult_value.setFont(QFont("Roman times", 20, QFont.Bold))
 
-        self.countLabel.setText('12')
-        self.detcountLabel.setText('0')
-        self.totalLabel.setText('0')
-        self.alertLabel.setText('0')
+        # 设置初始值
+        self.labelTotal_value.setText('0')
+        self.labelWarning_value.setText('0')
+        self.labelResult_value.setText('合格')
 
-        self.label = QLabel(self)
+        # 1~4号相机的展示，对应采集正、左侧、右侧、顶（顺时针方向）
+        self.labelCam1 = QLabel(self)
         self.QScrollArea = QScrollArea(self)
         self.QScrollArea.setBackgroundRole(QPalette.Dark)
         self.QScrollArea.setWidget(self.label)
