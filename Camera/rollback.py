@@ -176,25 +176,6 @@ class Camera():
 
     @mvsdk.method(mvsdk.CAMERA_SNAP_PROC)
     def GrabCallback(self, hCamera, pRawData, pFrameHead, pContext):
-        # pRawData, FrameHead = mvsdk.CameraGetImageBuffer(self.hCamera, 4294967295)
-        # mvsdk.CameraImageProcess(self.hCamera, pRawData, self.pFrameBuffer, FrameHead)
-        # mvsdk.CameraReleaseImageBuffer(hCamera, pRawData)
-        # print("进入")
-        # try:
-        #     # 此时图片已经存储在pFrameBuffer中，对于彩色相机pFrameBuffer=RGB数据，黑白相机pFrameBuffer=8位灰度数据
-        #     # 把图片保存到硬盘文件中"+str(i)+"
-        #     status = mvsdk.CameraSaveImage(hCamera, "Image/grab", self.pFrameBuffer, FrameHead,
-        #                                    mvsdk.FILE_JPG, 100)
-        #     if status == mvsdk.CAMERA_STATUS_SUCCESS:
-        #         print("Save image successfully. image_size = {}X{}".format(FrameHead.iWidth, FrameHead.iHeight))
-        #     else:
-        #         print("Save image failed. err={}".format(status))
-        #
-        # except mvsdk.CameraException as e:
-        #     print("CameraGetImageBuffer failed({}): {}".format(e.error_code, e.message))
-        # if (cv2.waitKey(1) & 0xFF) == ord('q'):
-        #     self.quit = True
-
         FrameHead = pFrameHead[0]
         pFrameBuffer = self.pFrameBuffer
 
@@ -213,16 +194,6 @@ class Camera():
             print("Save image successfully. image_size = {}X{}".format(FrameHead.iWidth, FrameHead.iHeight))
         else:
             print("Save image failed. err={}".format(status))
-
-        # frame_data = (mvsdk.c_ubyte * FrameHead.uBytes).from_address(pFrameBuffer)
-        # frame = np.frombuffer(frame_data, dtype=np.uint8)
-        # frame = frame.reshape(
-        #     (FrameHead.iHeight, FrameHead.iWidth, 1 if FrameHead.uiMediaType == mvsdk.CAMERA_MEDIA_TYPE_MONO8 else 3))
-        #
-        # frame = cv2.resize(frame, (640, 480), interpolation=cv2.INTER_LINEAR)
-        # cv2.imshow("Press q to end", frame)
-        # if (cv2.waitKey(1) & 0xFF) == ord('q'):
-        #     self.quit = True
 
 
 if __name__ == '__main__':
